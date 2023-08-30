@@ -2,6 +2,8 @@ plugins {
     `kotlin-dsl`
 }
 
+version = libs.versions.mvm.get()
+
 repositories {
     mavenCentral()
     google()

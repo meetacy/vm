@@ -1,10 +1,8 @@
-/*
- * Copyright (c) 2023 Meetacy. All rights reserved.
- */
-
 plugins {
     id("kmm-library-convention")
 }
+
+version = libs.versions.mvm.get()
 
 android {
     namespace = "app.meetacy.vm.mvi"
