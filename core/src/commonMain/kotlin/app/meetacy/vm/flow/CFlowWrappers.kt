@@ -13,15 +13,15 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlin.jvm.JvmName
 
-public class CStateFlow<T : Any>(private val origin: StateFlow<T>) : StateFlow<T> by origin {
+public class CStateFlow<out T : Any>(private val origin: StateFlow<T>) : StateFlow<T> by origin {
     public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
 }
 
-public class CSharedFlow<T : Any?>(private val origin: SharedFlow<T>) : SharedFlow<T> by origin {
+public class CSharedFlow<out T : Any?>(private val origin: SharedFlow<T>) : SharedFlow<T> by origin {
     public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
 }
 
-public class CFlow<T : Any>(private val origin: Flow<T>) : Flow<T> by origin {
+public class CFlow<out T : Any>(private val origin: Flow<T>) : Flow<T> by origin {
     public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
 }
 
