@@ -7,10 +7,10 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 
-public fun <T : Any> Flow<T>.cStateIn(
+public fun <T> Flow<T>.cStateIn(
     scope: CoroutineScope,
     started: SharingStarted = SharingStarted.Eagerly,
     initialValue: T
 ): CStateFlow<T> = stateIn(scope, started, initialValue).cStateFlow()
 
-public fun <T : Any> ReceiveChannel<T>.receiveAsCFlow(): CFlow<T> = receiveAsFlow().cFlow()
+public fun <T> ReceiveChannel<T>.receiveAsCFlow(): CFlow<T> = receiveAsFlow().cFlow()
