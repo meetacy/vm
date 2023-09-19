@@ -2,40 +2,57 @@
 
 package app.meetacy.vm.flow
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 
-public class CStateFlow<out T>(private val origin: StateFlow<T>) : StateFlow<T> by origin {
+public open class CFlow<out T>(private val origin: Flow<T>) : Flow<T> by origin {
     public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
 }
 
-public class CSharedFlow<out T>(private val origin: SharedFlow<T>) :
-    SharedFlow<T> by origin {
-    public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
+public open class CStateFlow<out T>(private val origin: StateFlow<T>) : CFlow<T>(origin), StateFlow<T> by origin {
+    override val replayCache: List<T> get() = origin.replayCache
+
+    override val value: T get() = origin.value
+
+    override suspend fun collect(collector: FlowCollector<T>): Nothing = origin.collect(collector)
 }
 
-public class CFlow<out T>(private val origin: Flow<T>) : Flow<T> by origin {
-    public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
+public open class CSharedFlow<out T>(private val origin: SharedFlow<T>) :
+    CFlow<T>(origin), SharedFlow<T> by origin {
+    override suspend fun collect(collector: FlowCollector<T>): Nothing = origin.collect(collector)
 }
 
 public class CMutableStateFlow<T>(private val origin: MutableStateFlow<T>) :
-    MutableStateFlow<T> by origin {
-    public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
+    CStateFlow<T>(origin), MutableStateFlow<T> by origin {
+
+    override val replayCache: List<T> get() = origin.replayCache
+
+    override var value: T
+        get() = super.value
+        set(value) {
+            origin.value = value
+        }
+
+    override val subscriptionCount: StateFlow<Int> = origin.subscriptionCount
+
+    override suspend fun emit(value: T): Unit = origin.emit(value)
+
+    @ExperimentalCoroutinesApi
+    override fun resetReplayCache(): Unit = origin.resetReplayCache()
+
+    override fun tryEmit(value: T): Boolean = origin.tryEmit(value)
+
+    override fun compareAndSet(expect: T, update: T): Boolean = origin.compareAndSet(expect, update)
+    override suspend fun collect(collector: FlowCollector<T>): Nothing = origin.collect(collector)
+
 }
 
 public class CMutableSharedFlow<T>(private val origin: MutableSharedFlow<T>) :
-    MutableSharedFlow<T> by origin {
-    public fun subscribe(block: (T) -> Unit): Disposable = flowSubscribe(block)
+    CSharedFlow<T>(origin), MutableSharedFlow<T> by origin {
+
+    override val replayCache: List<T> get() = origin.replayCache
+    override suspend fun collect(collector: FlowCollector<T>): Nothing = origin.collect(collector)
 }
 
 public fun <T> Flow<T>.cFlow(): CFlow<T> = CFlow(this)
