@@ -45,6 +45,10 @@ public abstract class MviViewModel<State : Any, Action, Event>(initialState: Sta
         viewModelScope.launch(block = block)
     }
 
+    protected fun performAction(action: Action) {
+        viewAction = action
+    }
+
     private companion object {
         const val REPLY_CAPACITY = 1
     }
