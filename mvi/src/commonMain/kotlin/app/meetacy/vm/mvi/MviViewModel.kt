@@ -2,16 +2,15 @@ package app.meetacy.vm.mvi
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import app.meetacy.vm.ViewModel
+import app.meetacy.vm.extension.launchIn
 import app.meetacy.vm.flow.CSharedFlow
 import app.meetacy.vm.flow.CStateFlow
 import app.meetacy.vm.flow.cSharedFlow
 import app.meetacy.vm.flow.cStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 
 public abstract class MviViewModel<State : Any, Action, Event>(initialState: State) : ViewModel() {
 
@@ -44,6 +43,12 @@ public abstract class MviViewModel<State : Any, Action, Event>(initialState: Sta
     protected fun viewModelScopeLaunch(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(block = block)
     }
+
+    protected fun State.mutate(block: (State) -> State = { it }): Unit = _states.update { block(this) }
+
+    protected fun <T> Flow<T>.observe(block: suspend (T) -> Unit): Job = launchIn(viewModelScope, block)
+
+    protected fun Action.send() { viewAction = this }
 
     protected fun performAction(action: Action) {
         viewAction = action
