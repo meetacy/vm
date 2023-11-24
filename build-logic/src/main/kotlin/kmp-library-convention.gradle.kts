@@ -17,21 +17,31 @@ kotlin {
     iosArm64()
     iosX64()
     iosSimulatorArm64()
+    jvm()
 
     sourceSets {
         val commonMain by getting
         val commonTest by getting
 
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
+        val nativeTargets = listOf(
+            "iosArm32",
+            "iosArm64",
+            "iosX64",
+            "iosSimulatorArm64",
+        )
 
-        val iosMain by creating {
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-        }
+        val targetWithoutAndroid = nativeTargets + listOf(
+            "jvm",
+        )
+
+        val nonAndroidMain by creating
+        nonAndroidMain.dependsOn(commonMain)
+
+        targetWithoutAndroid.mapNotNull { findByName("${it}Main") }
+            .forEach { it.dependsOn(nonAndroidMain) }
+
+        val nonAndroidTest by creating
+        nonAndroidTest.dependsOn(commonTest)
 
         val iosX64Test by getting
         val iosArm64Test by getting

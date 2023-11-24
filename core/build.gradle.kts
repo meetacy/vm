@@ -1,5 +1,5 @@
 plugins {
-    id("kmm-library-convention")
+    id("kmp-library-convention")
 }
 
 version = libs.versions.mvm.get()

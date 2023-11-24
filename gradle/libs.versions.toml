@@ -5,7 +5,7 @@ androidGradle = "7.4.2"
 androidLifecycleVersion = "2.6.2"
 kotlinxCoroutines = "1.7.3"
 
-mvm = "0.0.6"
+mvm = "0.0.7"
 
 [libraries]
 
@@ -14,9 +14,10 @@ lifecycleKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.re
 androidViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidLifecycleVersion" }
 composeFoundation = { module = "androidx.compose.foundation:foundation" }
 kotlinxCoroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinxCoroutinesTest = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 
 # https://developer.android.com/jetpack/compose/bom/bom-mapping
-composeBOM = "androidx.compose:compose-bom:2023.09.00"
+composeBOM = "androidx.compose:compose-bom:2023.10.01"
 
 # gradle plugins
 kotlinGradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }

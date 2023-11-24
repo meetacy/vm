@@ -1,16 +1,16 @@
 package app.meetacy.vm.mvi
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.launch
 import app.meetacy.vm.ViewModel
 import app.meetacy.vm.extension.launchIn
 import app.meetacy.vm.flow.CSharedFlow
 import app.meetacy.vm.flow.CStateFlow
 import app.meetacy.vm.flow.cSharedFlow
 import app.meetacy.vm.flow.cStateFlow
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 public abstract class MviViewModel<State : Any, Action, Event>(initialState: State) : ViewModel() {
 
