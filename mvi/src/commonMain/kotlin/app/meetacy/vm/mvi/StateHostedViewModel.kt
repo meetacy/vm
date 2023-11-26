@@ -9,6 +9,8 @@ import kotlinx.coroutines.launch
 
 public abstract class StateHostedViewModel<TState, TEffect>: ViewModel(), StateHost<TState, TEffect> {
 
+    protected val state: TState get() = holder.states.value
+
     protected fun viewModelScopeLaunch(block: suspend CoroutineScope.() -> Unit) {
         viewModelScope.launch(block = block)
     }
@@ -23,7 +25,7 @@ public abstract class StateHostedViewModel<TState, TEffect>: ViewModel(), StateH
         holder.accept(holder.states.value.transform())
     }
 
-    protected fun accept(effect: TEffect) {
-        viewModelScope.launch { holder.accept(effect) }
+    protected fun perform(effect: TEffect) {
+        viewModelScope.launch { holder.perform(effect) }
     }
 }

@@ -5,7 +5,7 @@ androidGradle = "7.4.2"
 androidLifecycleVersion = "2.6.2"
 kotlinxCoroutines = "1.7.3"
 
-mvm = "0.0.7"
+mvm = "0.0.8"
 
 [libraries]
 

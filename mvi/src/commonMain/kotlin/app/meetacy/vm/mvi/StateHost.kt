@@ -26,7 +26,7 @@ public fun <TState, TEffect> StateHost<TState, TEffect>.holder(
         }
     }
 
-    override suspend fun accept(effect: TEffect) {
+    override suspend fun perform(effect: TEffect) {
         _effects.send(effect)
     }
 

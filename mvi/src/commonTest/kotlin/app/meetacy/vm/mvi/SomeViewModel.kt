@@ -5,6 +5,7 @@ import app.meetacy.vm.extension.launchIn
 class SomeViewModel: StateHostedViewModel<SomeViewModel.State, SomeViewModel.Effect>() {
 
     override val holder: StateHolder<State, Effect> = holder(State())
+
     data class State(val isLoading: Boolean = true)
 
     sealed interface Effect

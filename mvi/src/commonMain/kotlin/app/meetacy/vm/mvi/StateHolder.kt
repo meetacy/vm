@@ -8,7 +8,7 @@ public abstract class StateHolder<TState, TEffect> {
     public abstract val effects: CFlow<TEffect>
     public abstract val states: CStateFlow<TState>
 
-    public abstract suspend fun accept(intent: Intent<TState, TEffect>)
-    public abstract suspend fun accept(effect: TEffect)
-    public abstract fun accept(newState: TState)
+    internal abstract suspend fun accept(intent: Intent<TState, TEffect>)
+    internal abstract suspend fun perform(effect: TEffect)
+    internal abstract fun accept(newState: TState)
 }
